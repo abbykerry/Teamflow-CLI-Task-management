@@ -1,0 +1,11 @@
+# This file contains user data for the Teamflow CLI Task Management application. 
+Each user has an id, username, password hash, and role. The password hash is a placeholder
+#List of dictionaries.
+[
+  {
+    "id": 1,
+    "username": "abby",
+    "password_hash": "...",
+    "role": "admin"
+  }
+]
