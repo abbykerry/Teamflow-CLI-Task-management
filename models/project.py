@@ -8,7 +8,7 @@ class Project:
         description,
         owner_id,
         member_ids,
-        created_at=None
+        created_at=None # Optional, will be set to current time if not provided
     ):
         self.id = id
         self.name = name
@@ -17,6 +17,6 @@ class Project:
         self.member_ids = member_ids
 
         if created_at:
-            self.created_at = created_at
+            self.created_at = created_at # Use provided created_at if given (e.g., when loading from JSON)
         else:
-            self.created_at = datetime.now().isoformat()
+            self.created_at = datetime.now().isoformat() # Set to current time in ISO format if not provided (e.g., when creating a new project)
