@@ -13,14 +13,14 @@ class Session:
     def login(self, user_data: Any) -> None:
         """
         Saves the user's data into memory. 
-        Role 2 will call this after a successful password check.
+        Maggie will call this after a successful password check.
         """
         self.current_user = user_data
 
     def logout(self) -> None:
         """
         Wipes the user from memory. 
-        Role 2 will call this when the user chooses 'Exit' or 'Logout'.
+        Maggie will call this when the user chooses 'Exit' or 'Logout'.
         """
         self.current_user = None
 
