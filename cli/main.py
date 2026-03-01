@@ -1,8 +1,8 @@
 from auth.session import Session
-import auth_service
-import menu
-import project_cli
-import task_cli
+from auth import auth_service
+from cli import menu
+from cli import project_cli
+from cli import task_cli
 
 def main():
     session = Session()
