@@ -37,3 +37,13 @@ def create_task(project_id, title, assigned_to=None, status="todo"):
     save_tasks(tasks)
 
     return new_task
+
+def get_tasks_by_project(project_id):
+    tasks = load_tasks()
+
+    project_tasks = [
+        task for task in tasks
+        if task.project_id == project_id
+    ]
+
+    return project_tasks
