@@ -1,17 +1,20 @@
 from auth.session import Session
-import auth_service
-import menu
-import project_cli
-import task_cli
+from auth import auth_service
+from cli import menus
+from cli import project_cli
+from cli import task_cli
+from rich.console import Console
+
+console = Console()
 
 def main():
     session = Session()
 
-    print("Welcome to Teamflow CLI Task Management!")
+    console.print("[bold cyan]Welcome to Teamflow CLI Task Management![/bold cyan]")
 
     while True:
         if not session.is_authenticated():
-            choice = menu.show_auth_menu()
+            choice = menus.show_auth_menu()
             if choice == "login":
                 # Assume these prompts are handled within the service or called separately
                 username = input("Username: ")
@@ -20,6 +23,19 @@ def main():
                     print(f"\nLogin successful! Welcome, {session.current_user.username}.")
                 else:
                     print("\nLogin failed. Please check your credentials.")
+            elif choice == "register":
+                username = input("Username: ")
+                password = input("Password: ")
+                role = input("Role (admin/user): ").strip().lower()
+                
+                if role not in ['admin', 'user']:
+                    print("Error: Invalid role. Must be 'admin' or 'user'.")
+                else:
+                    try:
+                        auth_service.register(username, password, role)
+                        print(f"\nRegistration successful for {username}! You can now login.")
+                    except ValueError as e:
+                        print(f"\nError: {e}")
             elif choice == "exit":
                 print("Goodbye!")
                 break
@@ -28,9 +44,9 @@ def main():
         # Authenticated flow
         role = session.current_user.role
         if role == 'admin':
-            choice, action_type = menu.show_admin_menu()
+            choice, action_type = menus.show_admin_menu()
         else:
-            choice, action_type = menu.show_user_menu()
+            choice, action_type = menus.show_user_menu()
 
         if choice == "logout":
             session.logout()

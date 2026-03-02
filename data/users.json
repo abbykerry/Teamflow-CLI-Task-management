@@ -1,0 +1,8 @@
+[
+    {
+        "id": 1,
+        "username": "testuser",
+        "password_hash": "3c39ae514760d5e2259ad9d811766978:ce039b25def54b9c33ff8d81cac1c1af1119589530065553209a1df0841f3d58",
+        "role": "user"
+    }
+]
