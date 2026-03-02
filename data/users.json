@@ -2,19 +2,25 @@
     {
         "id": 1,
         "username": "Abby",
-        "password_hash": "5e0ee53683f612ea2a4539b23b02a4a8:5ec2aa281eb320746fb14f674d44acfa9af6f947a07e880948fc0d7833d90fc9",
+        "_password_hash": "5e0ee53683f612ea2a4539b23b02a4a8:5ec2aa281eb320746fb14f674d44acfa9af6f947a07e880948fc0d7833d90fc9",
         "role": "admin"
     },
     {
         "id": 2,
         "username": "Ronny",
-        "password_hash": "043b4ad0c4d19f3bbe3ad362b87360cd:2973efb5d33777f4e8bd31e2525fad9a38f6f158aa3b13661a2469de80cbae7f",
+        "_password_hash": "043b4ad0c4d19f3bbe3ad362b87360cd:2973efb5d33777f4e8bd31e2525fad9a38f6f158aa3b13661a2469de80cbae7f",
         "role": "user"
     },
     {
         "id": 3,
         "username": "Maggy",
-        "password_hash": "84cbde6bdd9f4d95f76556a6c2f9b415:6faf8b1de9b41af448b133afd8dee301a91c7cf5f0ef1fc167255f99bb784a60",
+        "_password_hash": "84cbde6bdd9f4d95f76556a6c2f9b415:6faf8b1de9b41af448b133afd8dee301a91c7cf5f0ef1fc167255f99bb784a60",
         "role": "user"
+    },
+    {
+        "id": 4,
+        "username": "ronny",
+        "_password_hash": "78c6722b8f49c4fb3735a0704055fb98:c858704fe71afcdcc8f1b49395186098a461369948d90a9f89db63771c424fdc",
+        "role": "admin"
     }
 ]

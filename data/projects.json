@@ -30,5 +30,21 @@
         "owner_id": 2,
         "member_ids": [],
         "created_at": "2026-03-01T23:15:03.163085"
+    },
+    {
+        "id": 5,
+        "name": "Group 7 work",
+        "description": "Lab work",
+        "owner_id": 4,
+        "member_ids": [],
+        "created_at": "2026-03-02T11:08:24.374370"
+    },
+    {
+        "id": 6,
+        "name": "Group 7 work",
+        "description": "Lab work",
+        "owner_id": 4,
+        "member_ids": [],
+        "created_at": "2026-03-02T11:09:09.136859"
     }
 ]
