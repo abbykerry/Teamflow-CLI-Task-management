@@ -5,8 +5,17 @@ from services.project_service import load_projects
 from services.user_service import load_users
 from cli import menu
 
+# optional rich support for pretty tables
+try:
+    from rich.console import Console
+    from rich.table import Table
+    console = Console()
+    USE_RICH = True
+except ImportError:  # rich not installed
+    console = None
+    USE_RICH = False
 
-def create_task_action(session):
+
 def create_task_action(session):
     """Display projects and users, then create a task (admin-only via menu guard)."""
     projects = load_projects()

@@ -25,7 +25,19 @@ def load_projects():
                 logger.error(f"JSON decode error: {e}")
                 projects_data = []
 
-        return [Project(**p) for p in projects_data]
+        # Normalize keys from private attributes to public parameter names
+        normalized = []
+        for p in projects_data:
+            normalized_p = {
+                'id': p.get('_id', p.get('id')),
+                'name': p.get('_name', p.get('name')),
+                'description': p.get('_description', p.get('description')),
+                'owner_id': p.get('_owner_id', p.get('owner_id')),
+                'member_ids': p.get('_member_ids', p.get('member_ids')),
+                'created_at': p.get('_created_at', p.get('created_at')),
+            }
+            normalized.append(normalized_p)
+        return [Project(**p) for p in normalized]
     except Exception as e:
         logger.exception(f"Error loading projects: {e}")
         return []
@@ -33,8 +45,21 @@ def load_projects():
 
 def save_projects(projects):
     try:
+        # Normalize private attributes to public names for JSON
+        data = []
+        for p in projects:
+            p_dict = p.__dict__.copy()
+            # Map private to public names
+            p_dict['id'] = p_dict.pop('_id', None)
+            p_dict['name'] = p_dict.pop('_name', None)
+            p_dict['description'] = p_dict.pop('_description', None)
+            p_dict['owner_id'] = p_dict.pop('_owner_id', None)
+            p_dict['member_ids'] = p_dict.pop('_member_ids', None)
+            p_dict['created_at'] = p_dict.pop('_created_at', None)
+            data.append(p_dict)
+        
         with open(PROJECTS_FILE, "w") as f:
-            json.dump([p.__dict__ for p in projects], f, indent=4)
+            json.dump(data, f, indent=4)
         logger.info(f"Saved {len(projects)} projects")
     except Exception as e:
         logger.error(f"Error saving projects: {e}")

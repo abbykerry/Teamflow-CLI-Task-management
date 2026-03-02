@@ -23,21 +23,46 @@ def load_tasks():
                 logger.error(f"JSON decode error: {e}")
                 tasks_data = []
 
-        return [Task(**t) for t in tasks_data]
+        # Normalize keys from private attributes to public parameter names
+        normalized = []
+        for t in tasks_data:
+            normalized_t = {
+                'id': t.get('_id', t.get('id')),
+                'project_id': t.get('_project_id', t.get('project_id')),
+                'title': t.get('_title', t.get('title')),
+                'assigned_to': t.get('_assigned_to', t.get('assigned_to')),
+                'status': t.get('_status', t.get('status')),
+                'created_at': t.get('_created_at', t.get('created_at')),
+            }
+            normalized.append(normalized_t)
+        return [Task(**t) for t in normalized]
     except Exception as e:
         logger.exception(f"Error loading tasks: {e}")
         return []
 
 def save_tasks(tasks):
     try:
+        # Normalize private attributes to public names for JSON
+        data = []
+        for t in tasks:
+            t_dict = t.__dict__.copy()
+            # Map private to public names
+            t_dict['id'] = t_dict.pop('_id', None)
+            t_dict['project_id'] = t_dict.pop('_project_id', None)
+            t_dict['title'] = t_dict.pop('_title', None)
+            t_dict['assigned_to'] = t_dict.pop('_assigned_to', None)
+            t_dict['status'] = t_dict.pop('_status', None)
+            t_dict['created_at'] = t_dict.pop('_created_at', None)
+            data.append(t_dict)
+        
         with open(TASKS_FILE, "w") as f:
-            json.dump([t.__dict__ for t in tasks], f, indent=4)
+            json.dump(data, f, indent=4)
         logger.info(f"Saved {len(tasks)} tasks")
     except Exception as e:
         logger.error(f"Error saving tasks: {e}")
         raise
 
-def create_task(project_id, title, assigned_to=None, status="todo"):
+def create_task(project_id, title, description="", assigned_to=None, status="todo"):
     try:
         tasks = load_tasks()
 

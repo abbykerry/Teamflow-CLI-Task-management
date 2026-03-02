@@ -1,6 +1,5 @@
 # cli/project_cli.py
 
-def create_project_action(session):
 from services.project_service import (
     create_project,
     load_projects,
@@ -36,7 +35,6 @@ def create_project_action(session):
     print(f"\n✅ Project '{new_project.name}' created successfully (ID: {new_project.id})")
 
 
-def assign_user_action(session):
 def assign_user_action(session):
     """Display projects and users, then assign a member (admin-only via menu guard)."""
     # Show projects
