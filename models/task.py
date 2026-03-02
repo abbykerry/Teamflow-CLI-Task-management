@@ -21,3 +21,9 @@ class Task:
         self.status = status
         self.created_at = created_at or datetime.utcnow().isoformat() # If created_at is not provided, 
         #it will be set to the current date and time in ISO format. This allows for automatic timestamping of when the task was created without requiring the caller to provide this information.
+
+    def __repr__(self):
+        return f"Task(id={self.id}, title='{self.title}', status='{self.status}')"
+
+    def __str__(self):
+        return f"Task: {self.title} [{self.status}] (ID: {self.id})"
