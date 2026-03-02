@@ -3,13 +3,16 @@
 def show_auth_menu():
     print("\n=== AUTH MENU ===")
     print("1. Login")
-    print("2. Exit")
+    print("2. Register")
+    print("3. Exit")
 
     choice = input("Choose an option: ").strip()
 
     if choice == "1":
         return "login"
     elif choice == "2":
+        return "register"
+    elif choice == "3":
         return "exit"
     else:
         print("Invalid choice.")
@@ -64,6 +67,15 @@ def projects_menu():
     print("\n=== PROJECTS MENU ===")
     print("1. Create project")
     print("2. View my projects")
+    print("3. Back")
+
+    return input("Choose an option: ").strip()
+
+
+def tasks_menu():
+    print("\n=== TASKS MENU ===")
+    print("1. Create Task")
+    print("2. View Tasks")
     print("3. Back")
 
     return input("Choose an option: ").strip()

@@ -18,15 +18,26 @@ def load_users():
         except json.JSONDecodeError:
             users_data = []  # treat empty or corrupted file as empty list
 
+    # Normalize data for User constructor
+    for u in users_data:
+        if '_password_hash' in u:
+            u['password_hash'] = u.pop('_password_hash')
+
     # Convert dictionaries to User objects
     return [User(**u) for u in users_data]
 
 
 def save_users(users):
     """Save a list of User objects to users.json"""
+    normalized_data = []
+    for u in users:
+        u_dict = u.__dict__.copy()
+        if '_password_hash' in u_dict:
+            u_dict['password_hash'] = u_dict.pop('_password_hash')
+        normalized_data.append(u_dict)
+
     with open(USERS_FILE, "w") as f:
-        json.dump([u.__dict__ for u in users], f, indent=4) # Converts each User object to a dictionary using __dict__ and 
-        #saves as JSON with indentation for readability
+        json.dump(normalized_data, f, indent=4)
 
 #creating user object
 def create_user(username, password_hash, role):

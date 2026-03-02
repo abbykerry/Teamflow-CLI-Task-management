@@ -1,15 +1,19 @@
 # cli/project_cli.py
 
 from services.project_service import create_project, load_projects
+from cli import menu
 
 
-def handle_project_actions(choice, session):
+def handle_project_actions(session):
     """
-    Handles ONE project-related action based on the user's menu choice.
-    Control always returns to main.py after this function finishes.
+    Handles project-related actions by showing the projects sub-menu.
+    Control returns to main.py after this function finishes.
     """
 
     user = session.current_user  # logged-in user object
+    
+    # Get user choice from the sub-menu
+    choice = menu.projects_menu()
 
     # OPTION 1: Create project
     if choice == "1":
@@ -45,6 +49,10 @@ def handle_project_actions(choice, session):
                     f"Name: {project.name} | "
                     f"Description: {project.description}"
                 )
+
+    # Back to main menu
+    elif choice == "3":
+        return
 
     # Any other choice (defensive programming)
     else:

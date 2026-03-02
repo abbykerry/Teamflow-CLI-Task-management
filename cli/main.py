@@ -55,9 +55,9 @@ def main():
 
         # Route the choice
         if action_type == "project":
-            project_cli.handle_project_actions(choice, session)
+            project_cli.handle_project_actions(session)
         elif action_type == "task":
-            task_cli.handle_task_actions(choice, session)
+            task_cli.handle_task_actions(session)
 
 if __name__ == "__main__":
     main()
