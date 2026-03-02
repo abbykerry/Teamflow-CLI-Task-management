@@ -55,26 +55,29 @@ def assign_user_action(session):
 
 def handle_project_actions(session):
     """
-    Handles project-related actions.
+    Handles project-related actions. Re-displays the projects menu until the
+    user chooses to go back.
     """
     user = session.current_user
-    choice = menu.projects_menu()
+    while True:
+        choice = menu.projects_menu()
 
-    if choice == "1":
-        create_project_action(session)
-    elif choice == "2":
-        assign_user_action(session)
-    elif choice == "3":
-        projects = load_projects()
-        user_projects = [p for p in projects if user_has_project_access(p, user.id)]
+        if choice == "1":
+            create_project_action(session)
+        elif choice == "2":
+            assign_user_action(session)
+        elif choice == "3":
+            projects = load_projects()
+            user_projects = [p for p in projects if user_has_project_access(p, user.id)]
 
-        if not user_projects:
-            print("\n📭 You have no projects yet.")
+            if not user_projects:
+                print("\n📭 You have no projects yet.")
+            else:
+                print("\n=== YOUR PROJECTS ===")
+                for project in user_projects:
+                    print(f"ID: {project.id} | Name: {project.name} | Description: {project.description}")
+        elif choice == "4":
+            # return to previous menu
+            break
         else:
-            print("\n=== YOUR PROJECTS ===")
-            for project in user_projects:
-                print(f"ID: {project.id} | Name: {project.name} | Description: {project.description}")
-    elif choice == "4":
-        return
-    else:
-        print("\n⚠️ Invalid project option selected.")
+            print("\n⚠️ Invalid project option selected.")
