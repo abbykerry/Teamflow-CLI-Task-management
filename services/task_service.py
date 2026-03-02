@@ -9,7 +9,10 @@ def load_tasks():
         return []
 
     with open(TASKS_FILE, "r") as f:
-        tasks_data = json.load(f)
+        try:
+            tasks_data = json.load(f)
+        except json.JSONDecodeError:
+            tasks_data = []
 
     return [Task(**t) for t in tasks_data]
 

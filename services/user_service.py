@@ -10,13 +10,16 @@ USERS_FILE = Path("data/users.json")
 def load_users():
     """Load all users from users.json and return a list of User objects"""
     if not USERS_FILE.exists():
-        return [] # Return empty list if file doesn't exist
+        return []
 
-    with open(USERS_FILE, "r") as f: # Open the JSON file safely in read mode
-        users_data = json.load(f) # Load the JSON data into a Python list of dictionaries
+    with open(USERS_FILE, "r") as f:
+        try:
+            users_data = json.load(f)  # attempt to read JSON
+        except json.JSONDecodeError:
+            users_data = []  # treat empty or corrupted file as empty list
 
-    users = [User(**u) for u in users_data]  #For every dictionary inside users_data, creates a User object by unpacking the dictionary as keyword arguments. This assumes that the keys in the dictionary match the parameters of the User class constructor
-    return users
+    # Convert dictionaries to User objects
+    return [User(**u) for u in users_data]
 
 
 def save_users(users):
