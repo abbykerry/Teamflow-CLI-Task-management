@@ -55,7 +55,25 @@ def user_has_project_access(project, user_id):
     if project.owner_id == user_id:
         return True
 
+    if project.member_ids is None:
+        project.member_ids = []
+
     if user_id in project.member_ids:
         return True
 
+    return False
+
+
+def assign_user_to_project(project_id, user_id):
+    """Assigns a user to a project by adding their user ID to the project's member list."""
+    projects = load_projects()
+    for p in projects:
+        if p.id == project_id:
+            if p.member_ids is None:
+                p.member_ids = []
+            
+            if user_id not in p.member_ids:
+                p.member_ids.append(user_id)
+                save_projects(projects)
+            return True
     return False
