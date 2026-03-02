@@ -4,6 +4,10 @@ from cli import menu
 from cli import project_cli
 from cli import task_cli
 
+# load environment variables if .env exists
+from dotenv import load_dotenv
+load_dotenv()
+
 def main():
     session = Session()
 

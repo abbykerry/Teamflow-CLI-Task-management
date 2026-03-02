@@ -3,21 +3,29 @@
 from services.task_service import create_task, load_tasks, save_tasks
 from services.project_service import load_projects
 from services.user_service import load_users
-from utils.decorators import require_role
 from cli import menu
 
 
-@require_role('admin')
 def create_task_action(session):
-    """Admin-only: Display projects and users, then create a task"""
+def create_task_action(session):
+    """Display projects and users, then create a task (admin-only via menu guard)."""
     projects = load_projects()
     if not projects:
         print("\n⚠️ Warning: No projects exist. Please create a project first.")
         return
 
-    print("\n=== AVAILABLE PROJECTS ===")
-    for project in projects:
-        print(f"ID: {project.id} | Name: {project.name}")
+    if USE_RICH:
+        console.print("\n[bold underline]AVAILABLE PROJECTS[/bold underline]")
+        table = Table(show_header=True, header_style="bold cyan")
+        table.add_column("ID", justify="right")
+        table.add_column("Name")
+        for project in projects:
+            table.add_row(str(project.id), project.name)
+        console.print(table)
+    else:
+        print("\n=== AVAILABLE PROJECTS ===")
+        for project in projects:
+            print(f"ID: {project.id} | Name: {project.name}")
 
     while True:
         try:
@@ -27,9 +35,19 @@ def create_task_action(session):
             print("Error: Invalid Project ID. Please enter a valid integer.")
 
     users = load_users()
-    print("\n=== AVAILABLE USERS ===")
-    for u in users:
-        print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
+    if USE_RICH:
+        console.print("\n[bold underline]AVAILABLE USERS[/bold underline]")
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("ID", justify="right")
+        table.add_column("Username")
+        table.add_column("Role")
+        for u in users:
+            table.add_row(str(u.id), u.username, u.role)
+        console.print(table)
+    else:
+        print("\n=== AVAILABLE USERS ===")
+        for u in users:
+            print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
 
     while True:
         try:
@@ -59,9 +77,20 @@ def update_task_status_action(session):
         print("\n📭 You have no tasks assigned.")
         return
 
-    print("\n=== YOUR TASKS ===")
-    for task in user_tasks:
-        print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
+    if USE_RICH:
+        console.print("\n[bold underline]YOUR TASKS[/bold underline]")
+        table = Table(show_header=True, header_style="bold green")
+        table.add_column("ID", justify="right")
+        table.add_column("Project")
+        table.add_column("Title")
+        table.add_column("Status")
+        for task in user_tasks:
+            table.add_row(str(task.id), str(task.project_id), task.title, task.status)
+        console.print(table)
+    else:
+        print("\n=== YOUR TASKS ===")
+        for task in user_tasks:
+            print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
 
     try:
         task_id = int(input("\nEnter task ID to update status: ").strip())
@@ -99,9 +128,20 @@ def handle_task_actions(session):
             if not assigned_tasks:
                 print("\n📭 You have no tasks assigned.")
             else:
-                print("\n=== YOUR TASKS ===")
-                for task in assigned_tasks:
-                    print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
+                if USE_RICH:
+                    console.print("\n[bold underline]YOUR TASKS[/bold underline]")
+                    table = Table(show_header=True, header_style="bold green")
+                    table.add_column("ID", justify="right")
+                    table.add_column("Project")
+                    table.add_column("Title")
+                    table.add_column("Status")
+                    for task in assigned_tasks:
+                        table.add_row(str(task.id), str(task.project_id), task.title, task.status)
+                    console.print(table)
+                else:
+                    print("\n=== YOUR TASKS ===")
+                    for task in assigned_tasks:
+                        print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
         elif choice == "4":
             # return to previous menu
             break
