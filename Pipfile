@@ -5,7 +5,11 @@ name = "pypi"
 
 [packages]
 
+# optional dependencies used by the CLI for enhanced output and config
+rich = "*"
+python-dotenv = "*"
+
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.10"
