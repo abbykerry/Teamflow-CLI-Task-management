@@ -81,26 +81,29 @@ def update_task_status_action(session):
 
 def handle_task_actions(session):
     """
-    Handles task-related actions.
+    Handles task-related actions. Keeps showing the tasks menu until the user
+    selects the "Back" option.
     """
     user = session.current_user
-    choice = menu.tasks_menu()
+    while True:
+        choice = menu.tasks_menu()
 
-    if choice == "1":
-        create_task_action(session)
-    elif choice == "2":
-        update_task_status_action(session)
-    elif choice == "3":
-        tasks = load_tasks()
-        assigned_tasks = [t for t in tasks if t.assigned_to == user.id]
+        if choice == "1":
+            create_task_action(session)
+        elif choice == "2":
+            update_task_status_action(session)
+        elif choice == "3":
+            tasks = load_tasks()
+            assigned_tasks = [t for t in tasks if t.assigned_to == user.id]
 
-        if not assigned_tasks:
-            print("\n📭 You have no tasks assigned.")
+            if not assigned_tasks:
+                print("\n📭 You have no tasks assigned.")
+            else:
+                print("\n=== YOUR TASKS ===")
+                for task in assigned_tasks:
+                    print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
+        elif choice == "4":
+            # return to previous menu
+            break
         else:
-            print("\n=== YOUR TASKS ===")
-            for task in assigned_tasks:
-                print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
-    elif choice == "4":
-        return
-    else:
-        print("\n⚠️ Invalid task option selected.")
+            print("\n⚠️ Invalid task option selected.")

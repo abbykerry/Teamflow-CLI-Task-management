@@ -4,7 +4,7 @@
         "project_id": 1,
         "title": "Set up CLI menus",
         "assigned_to": 2,
-        "status": "Complete",
+        "status": "done",
         "created_at": "2026-02-27T10:30:00"
     },
     {
@@ -12,7 +12,39 @@
         "project_id": 1,
         "title": "write readme file",
         "assigned_to": 3,
-        "status": "todo",
+        "status": "done",
         "created_at": "2026-03-02T08:23:25.846483"
+    },
+    {
+        "id": 3,
+        "project_id": 1,
+        "title": "React basics",
+        "assigned_to": 3,
+        "status": "in progress",
+        "created_at": "2026-03-02T10:32:54.620943"
+    },
+    {
+        "id": 4,
+        "project_id": 4,
+        "title": "Java basics",
+        "assigned_to": 2,
+        "status": "todo",
+        "created_at": "2026-03-02T10:34:08.252996"
+    },
+    {
+        "id": 5,
+        "project_id": 5,
+        "title": "Python sequences",
+        "assigned_to": 1,
+        "status": "done",
+        "created_at": "2026-03-02T10:34:53.016343"
+    },
+    {
+        "id": 6,
+        "project_id": 7,
+        "title": "Career examination - writing a great CV!",
+        "assigned_to": 3,
+        "status": "todo",
+        "created_at": "2026-03-02T11:54:26.532473"
     }
 ]

@@ -20,7 +20,9 @@
         "name": "React",
         "description": "beginner tutorial",
         "owner_id": 1,
-        "member_ids": [],
+        "member_ids": [
+            3
+        ],
         "created_at": "2026-03-01T16:59:34.559696"
     },
     {
@@ -33,6 +35,14 @@
     },
     {
         "id": 5,
+        "name": "python oop",
+        "description": "Object oriented programming intermediate level",
+        "owner_id": 3,
+        "member_ids": [],
+        "created_at": "2026-03-02T09:31:16.893890"
+    },
+    {
+        "id": 6,
         "name": "Group 7 work",
         "description": "Lab work",
         "owner_id": 4,
@@ -42,11 +52,21 @@
         "created_at": "2026-03-02T11:08:24.374370"
     },
     {
-        "id": 6,
-        "name": "Group 7 work",
-        "description": "Lab work",
-        "owner_id": 4,
+        "id": 7,
+        "name": "Career examination",
+        "description": "Guiding graduates on carerr preparation",
+        "owner_id": 1,
         "member_ids": [],
-        "created_at": "2026-03-02T11:09:09.136859"
+        "created_at": "2026-03-02T13:31:53.316319"
+    },
+    {
+        "id": 8,
+        "name": "CRUD",
+        "description": "Using CRUD and state management",
+        "owner_id": 1,
+        "member_ids": [
+            3
+        ],
+        "created_at": "2026-03-02T14:50:55.245513"
     }
 ]
