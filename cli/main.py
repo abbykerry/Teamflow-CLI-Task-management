@@ -1,20 +1,17 @@
 from auth.session import Session
 from auth import auth_service
-from cli import menus
+from cli import menu
 from cli import project_cli
 from cli import task_cli
-from rich.console import Console
-
-console = Console()
 
 def main():
     session = Session()
 
-    console.print("[bold cyan]Welcome to Teamflow CLI Task Management![/bold cyan]")
+    print("Welcome to Teamflow CLI Task Management!")
 
     while True:
         if not session.is_authenticated():
-            choice = menus.show_auth_menu()
+            choice = menu.show_auth_menu()
             if choice == "login":
                 # Assume these prompts are handled within the service or called separately
                 username = input("Username: ")
@@ -44,9 +41,9 @@ def main():
         # Authenticated flow
         role = session.current_user.role
         if role == 'admin':
-            choice, action_type = menus.show_admin_menu()
+            choice, action_type = menu.show_admin_menu()
         else:
-            choice, action_type = menus.show_user_menu()
+            choice, action_type = menu.show_user_menu()
 
         if choice == "logout":
             session.logout()

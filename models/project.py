@@ -7,7 +7,7 @@ class Project:
         name,
         description,
         owner_id,
-        member_ids,
+        member_ids=None,
         created_at=None # Optional, will be set to current time if not provided
     ):
         self.id = id

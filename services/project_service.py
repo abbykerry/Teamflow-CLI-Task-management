@@ -10,7 +10,10 @@ def load_projects():
         return []
 
     with open(PROJECTS_FILE, "r") as f:
-        projects_data = json.load(f) #loads the json data as a list of dictionaries, where each dictionary represents a project with its attributes (id, name, description, owner_id, member_ids)
+        try:
+            projects_data = json.load(f)
+        except json.JSONDecodeError:
+            projects_data = []
 
     return [Project(**p) for p in projects_data] # For every dictionary inside projects_data, creates a Project object by unpacking the dictionary as keyword arguments. 
     #This assumes that the keys in the dictionary match the parameters of the Project class constructor
