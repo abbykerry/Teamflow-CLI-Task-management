@@ -105,6 +105,8 @@ def handle_project_actions(session):
         elif choice == "3":
             projects = load_projects()
             all_tasks = load_tasks()
+            users = load_users()
+            user_map = {u.id: u.username for u in users}
 
             if user.role == "admin":
                 user_projects = projects
@@ -140,8 +142,10 @@ def handle_project_actions(session):
                                 p_id = str(project.id) if i == 0 else ""
                                 p_name = project.name if i == 0 else ""
                                 
+                                assigned_name = user_map.get(task.assigned_to, "Unknown")
+
                                 if user.role == "admin":
-                                    table.add_row(p_id, p_name, str(task.id), task.title, task.status, str(task.assigned_to))
+                                    table.add_row(p_id, p_name, str(task.id), task.title, task.status, assigned_name)
                                 else:
                                     table.add_row(p_id, p_name, str(task.id), task.title, task.status)
                         else:
@@ -165,7 +169,8 @@ def handle_project_actions(session):
 
                         if project_tasks:
                             for task in project_tasks:
-                                print(f"    -> Task: [{task.status}] {task.title} (Assigned to: {task.assigned_to})")
+                                assigned_name = user_map.get(task.assigned_to, "Unknown")
+                                print(f"    -> Task: [{task.status}] {task.title} (Assigned to: {assigned_name})")
                         else:
                             print("    -> No tasks exist for this project." if user.role == "admin" else "    -> No tasks assigned to you for this project.")
                 print("\n" + "=" * 45)
