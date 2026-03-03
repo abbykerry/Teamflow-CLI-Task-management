@@ -1,4 +1,3 @@
-A CLI task management system for teams
 # Teamflow CLI Task Management
 
 This repository implements a simple command-line task and project management
@@ -37,24 +36,23 @@ Teamflow-CLI-Task-management/
 
 1. Install Python 3.10 or newer.
 2. Clone the repository and `cd` into it.
-3. (Recommended) Use `pipenv` or another virtual environment:
+3. Install the required dependencies using `pipenv`:
 
 	```sh
-	pipenv install --dev
-	pipenv shell
+	pipenv install
 	```
 
-4. Populate optional environment variables in a `.env` file:
+4. Since the database files (`data/*.json`) are excluded from version control, you **must** initialize a clean, local database before running the app. Do this by running:
 
-	```env
-	DATA_DIR=data      # path where JSON files will be stored
-	LOG_LEVEL=DEBUG   # logging verbosity
+	```sh
+	python3 setup_users.py
 	```
+	*This will create the necessary data files along with a fresh Admin account.*
 
 5. Run the CLI with:
 
 	```sh
-	python main.py
+	pipenv run python3 -m cli.main
 	```
 
 ## Encapsulation and Validation
@@ -90,4 +88,3 @@ than CLI modules.
 ## License
 
 This project is provided under the MIT License. See `LICENSE.md` for details.
-A CLI task management system for teams

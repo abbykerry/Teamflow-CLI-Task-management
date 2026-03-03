@@ -18,12 +18,6 @@
         "password_hash": "84cbde6bdd9f4d95f76556a6c2f9b415:6faf8b1de9b41af448b133afd8dee301a91c7cf5f0ef1fc167255f99bb784a60"
     },
     {
-        "id": 4,
-        "username": "ronny",
-        "role": "admin",
-        "password_hash": "78c6722b8f49c4fb3735a0704055fb98:c858704fe71afcdcc8f1b49395186098a461369948d90a9f89db63771c424fdc"
-    },
-    {
         "id": 5,
         "username": "Michael",
         "role": "user",
@@ -34,5 +28,11 @@
         "username": "Angel",
         "role": "user",
         "password_hash": "9493e1fa355949fc7b81da8a69aa7ff2:19a96853269acf902d7a4f63154217a9b1f77cb1971b432eb7c4461239e680bb"
+    },
+    {
+        "id": 7,
+        "username": "Mike",
+        "role": "user",
+        "password_hash": "e14a96010c0327a298ce612b70654793:9b263e091ba95ee81adeeda0ec538f2bd4b7392415bfee27416048e5fde5b196"
     }
 ]

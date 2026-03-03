@@ -1,8 +1,9 @@
 # cli/task_cli.py
 
 from services.task_service import create_task, load_tasks, save_tasks
-from services.project_service import load_projects
+from services.project_service import load_projects, assign_user_to_project
 from services.user_service import load_users
+from utils.decorators import require_role
 from cli import menu
 
 # optional rich support for pretty tables
@@ -16,6 +17,7 @@ except ImportError:  # rich not installed
     USE_RICH = False
 
 
+@require_role('admin')
 def create_task_action(session):
     """Display projects and users, then create a task (admin-only via menu guard)."""
     projects = load_projects()
@@ -73,6 +75,9 @@ def create_task_action(session):
         assigned_to=assigned_to
     )
 
+    # Automatically enroll the user into the project when assigned a task
+    assign_user_to_project(project_id, assigned_to)
+
     print(f"\n✅ Task '{new_task.title}' created successfully (ID: {new_task.id})")
 
 
@@ -107,10 +112,25 @@ def update_task_status_action(session):
         target_task = next((t for t in user_tasks if t.id == task_id), None)
         
         if target_task:
-            new_status = input("Enter new status: ").strip()
-            target_task.status = new_status
-            save_tasks(tasks)
-            print(f"\n✅ Task {task_id} status updated to '{new_status}'.")
+            print("\nAvailable statuses:")
+            print("1. todo")
+            print("2. in_progress")
+            print("3. done")
+            
+            status_choice = input("Choose an option (1-3): ").strip()
+            status_map = {
+                "1": "todo",
+                "2": "in_progress",
+                "3": "done"
+            }
+            
+            if status_choice in status_map:
+                new_status = status_map[status_choice]
+                target_task.status = new_status
+                save_tasks(tasks)
+                print(f"\n✅ Task {task_id} status updated to '{new_status}'.")
+            else:
+                print("\n❌ Error: Invalid status option selected.")
         else:
             print(f"\n❌ You are not assigned to task ID {task_id}.")
     except ValueError:
