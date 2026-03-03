@@ -1,6 +1,6 @@
 # models/task.py
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Task:
@@ -24,7 +24,7 @@ class Task:
         self._title = title
         self._assigned_to = assigned_to
         self._status = status
-        self._created_at = created_at or datetime.utcnow().isoformat()
+        self._created_at = created_at or datetime.now(timezone.utc).isoformat()
 
     @property
     def id(self) -> int:
