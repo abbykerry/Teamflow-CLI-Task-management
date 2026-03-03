@@ -52,7 +52,7 @@ Teamflow-CLI-Task-management/
 5. Run the CLI with:
 
 	```sh
-	pipenv run python3 -m cli.main
+	python3 -m cli.main
 	```
 
 ## Encapsulation and Validation

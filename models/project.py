@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Project:
@@ -21,7 +21,7 @@ class Project:
         self._description = description
         self._owner_id = owner_id
         self._member_ids = member_ids if member_ids is not None else []
-        self._created_at = created_at or datetime.now().isoformat()
+        self._created_at = created_at or datetime.now(timezone.utc).isoformat()
 
     @property
     def id(self):
