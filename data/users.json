@@ -28,5 +28,11 @@
         "username": "Michael",
         "role": "user",
         "password_hash": "261ffe4c4d90d4cdc699475bd1e8697b:fa73b043d83666ee8a8ac1ad6d2ad79daeb245a0347d4b3a81958a294ea2e03c"
+    },
+    {
+        "id": 6,
+        "username": "Angel",
+        "role": "user",
+        "password_hash": "9493e1fa355949fc7b81da8a69aa7ff2:19a96853269acf902d7a4f63154217a9b1f77cb1971b432eb7c4461239e680bb"
     }
 ]

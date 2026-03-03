@@ -46,5 +46,21 @@
         "assigned_to": 3,
         "status": "todo",
         "created_at": "2026-03-02T11:54:26.532473"
+    },
+    {
+        "id": 7,
+        "project_id": 3,
+        "title": "routers",
+        "assigned_to": 4,
+        "status": "todo",
+        "created_at": "2026-03-02T19:20:40.387502"
+    },
+    {
+        "id": 8,
+        "project_id": 4,
+        "title": "API",
+        "assigned_to": 6,
+        "status": "in progress",
+        "created_at": "2026-03-02T19:26:15.066460"
     }
 ]
