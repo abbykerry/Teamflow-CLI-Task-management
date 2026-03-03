@@ -28,6 +28,7 @@ Teamflow-CLI-Task-management/
 ├── utils/               # helper utilities (logging, etc.)
 ├── tests/               # pytest-compatible unit tests
 ├── data/                # default data directory for JSON files
+├── Pipfile              # dependency management via Pipenv
 └── README.md            # this document
 ```
 
@@ -35,10 +36,10 @@ Teamflow-CLI-Task-management/
 
 1. Install Python 3.10 or newer.
 2. Clone the repository and `cd` into it.
-3. Install the required dependencies:
+3. Install the required dependencies using `pipenv`:
 
 	```sh
-	pip install -r requirements.txt
+	pipenv install
 	```
 
 4. Since the database files (`data/*.json`) are excluded from version control, you **must** initialize a clean, local database before running the app. Do this by running:
@@ -51,7 +52,7 @@ Teamflow-CLI-Task-management/
 5. Run the CLI with:
 
 	```sh
-	python3 -m cli.main
+	pipenv run python3 -m cli.main
 	```
 
 ## Encapsulation and Validation
