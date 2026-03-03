@@ -69,10 +69,25 @@ def update_task_status_action(session):
         target_task = next((t for t in user_tasks if t.id == task_id), None)
         
         if target_task:
-            new_status = input("Enter new status: ").strip()
-            target_task.status = new_status
-            save_tasks(tasks)
-            print(f"\n✅ Task {task_id} status updated to '{new_status}'.")
+            print("\nAvailable statuses:")
+            print("1. todo")
+            print("2. in_progress")
+            print("3. done")
+            
+            status_choice = input("Choose an option (1-3): ").strip()
+            status_map = {
+                "1": "todo",
+                "2": "in_progress",
+                "3": "done"
+            }
+            
+            if status_choice in status_map:
+                new_status = status_map[status_choice]
+                target_task.status = new_status
+                save_tasks(tasks)
+                print(f"\n✅ Task {task_id} status updated to '{new_status}'.")
+            else:
+                print("\n❌ Error: Invalid status option selected.")
         else:
             print(f"\n❌ You are not assigned to task ID {task_id}.")
     except ValueError:

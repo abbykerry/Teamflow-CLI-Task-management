@@ -23,16 +23,12 @@ def main():
             elif choice == "register":
                 username = input("Username: ")
                 password = input("Password: ")
-                role = input("Role (admin/user): ").strip().lower()
                 
-                if role not in ['admin', 'user']:
-                    print("Error: Invalid role. Must be 'admin' or 'user'.")
-                else:
-                    try:
-                        auth_service.register(username, password, role)
-                        print(f"\nRegistration successful for {username}! You can now login.")
-                    except ValueError as e:
-                        print(f"\nError: {e}")
+                try:
+                    auth_service.register(username, password, 'user')
+                    print(f"\nRegistration successful for {username}! You can now login.")
+                except ValueError as e:
+                    print(f"\nError: {e}")
             elif choice == "exit":
                 print("Goodbye!")
                 break
