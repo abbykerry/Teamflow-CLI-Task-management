@@ -7,6 +7,9 @@ from services.project_service import (
     user_has_project_access,
 )
 from services.user_service import load_users
+from services.task_service import load_tasks
+from utils.decorators import require_role
+from cli.task_cli import update_task_status_action
 from cli import menu
 
 # optional rich support for pretty tables
@@ -20,6 +23,7 @@ except ImportError:  # rich not installed
     USE_RICH = False
 
 
+@require_role('admin')
 def create_project_action(session):
     """Prompt and create a new project (admin-only via menu guard)."""
     user = session.current_user
@@ -35,6 +39,7 @@ def create_project_action(session):
     print(f"\n✅ Project '{new_project.name}' created successfully (ID: {new_project.id})")
 
 
+@require_role('admin')
 def assign_user_action(session):
     """Display projects and users, then assign a member (admin-only via menu guard)."""
     # Show projects
@@ -99,25 +104,74 @@ def handle_project_actions(session):
             assign_user_action(session)
         elif choice == "3":
             projects = load_projects()
-            user_projects = [p for p in projects if user_has_project_access(p, user.id)]
+            all_tasks = load_tasks()
+
+            if user.role == "admin":
+                user_projects = projects
+                dashboard_title = "PROJECT DASHBOARD (Global View)"
+            else:
+                user_projects = [p for p in projects if user_has_project_access(p, user.id)]
+                dashboard_title = "PROJECT DASHBOARD (Your Projects & Tasks)"
 
             if not user_projects:
-                print("\n📭 You have no projects yet.")
+                print("\n📭 No projects available to display.")
             else:
                 if USE_RICH:
-                    console.print("\n[bold underline]YOUR PROJECTS[/bold underline]")
-                    table = Table(show_header=True, header_style="bold green")
-                    table.add_column("ID", justify="right")
-                    table.add_column("Name")
-                    table.add_column("Description")
+                    from rich.table import Table
+
+                    table = Table(title=f"\n[bold underline]{dashboard_title}[/bold underline]", show_header=True, header_style="bold cyan")
+                    table.add_column("Proj ID", justify="right", style="cyan")
+                    table.add_column("Project Name", style="cyan")
+                    table.add_column("Task ID", justify="right")
+                    table.add_column("Task Title")
+                    table.add_column("Status", style="magenta")
+                    if user.role == "admin":
+                        table.add_column("Assigned To")
+
                     for project in user_projects:
-                        table.add_row(str(project.id), project.name, project.description)
+                        if user.role == "admin":
+                            project_tasks = [t for t in all_tasks if t.project_id == project.id]
+                        else:
+                            project_tasks = [t for t in all_tasks if t.project_id == project.id and t.assigned_to == user.id]
+
+                        if project_tasks:
+                            for i, task in enumerate(project_tasks):
+                                # Only show the project ID/Name on the first row for this project to group them visually
+                                p_id = str(project.id) if i == 0 else ""
+                                p_name = project.name if i == 0 else ""
+                                
+                                if user.role == "admin":
+                                    table.add_row(p_id, p_name, str(task.id), task.title, task.status, str(task.assigned_to))
+                                else:
+                                    table.add_row(p_id, p_name, str(task.id), task.title, task.status)
+                        else:
+                            if user.role == "admin":
+                                table.add_row(str(project.id), project.name, "-", "[yellow]No tasks[/yellow]", "-", "-")
+                            else:
+                                table.add_row(str(project.id), project.name, "-", "[yellow]No tasks[/yellow]", "-")
+                    
                     console.print(table)
+                    print("")
                 else:
-                    print("\n=== YOUR PROJECTS ===")
+                    print(f"\n=== {dashboard_title} ===")
                     for project in user_projects:
-                        print(f"ID: {project.id} | Name: {project.name} | Description: {project.description}")
+                        print(f"\nProject: {project.name} (ID: {project.id})")
+                        print(f"Description: {project.description}")
+
+                        if user.role == "admin":
+                            project_tasks = [t for t in all_tasks if t.project_id == project.id]
+                        else:
+                            project_tasks = [t for t in all_tasks if t.project_id == project.id and t.assigned_to == user.id]
+
+                        if project_tasks:
+                            for task in project_tasks:
+                                print(f"    -> Task: [{task.status}] {task.title} (Assigned to: {task.assigned_to})")
+                        else:
+                            print("    -> No tasks exist for this project." if user.role == "admin" else "    -> No tasks assigned to you for this project.")
+                print("\n" + "=" * 45)
         elif choice == "4":
+            update_task_status_action(session)
+        elif choice == "5":
             break
         else:
             print("\n⚠️ Invalid project option selected.")

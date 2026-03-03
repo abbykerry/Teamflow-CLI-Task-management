@@ -4,7 +4,7 @@
         "project_id": 1,
         "title": "Set up CLI menus",
         "assigned_to": 2,
-        "status": "done",
+        "status": "todo",
         "created_at": "2026-02-27T10:30:00"
     },
     {
@@ -28,7 +28,7 @@
         "project_id": 4,
         "title": "Java basics",
         "assigned_to": 2,
-        "status": "todo",
+        "status": "in_progress",
         "created_at": "2026-03-02T10:34:08.252996"
     },
     {

@@ -67,8 +67,9 @@ def projects_menu():
     print("\n=== PROJECTS MENU ===")
     print("1. Create project (Admin)")
     print("2. Assign user to project (Admin)")
-    print("3. View my projects")
-    print("4. Back")
+    print("3. View my projects (Dashboard)")
+    print("4. Update Task Status")
+    print("5. Back")
 
     return input("Choose an option: ").strip()
 

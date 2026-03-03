@@ -18,12 +18,6 @@
         "password_hash": "84cbde6bdd9f4d95f76556a6c2f9b415:6faf8b1de9b41af448b133afd8dee301a91c7cf5f0ef1fc167255f99bb784a60"
     },
     {
-        "id": 4,
-        "username": "ronny",
-        "role": "admin",
-        "password_hash": "78c6722b8f49c4fb3735a0704055fb98:c858704fe71afcdcc8f1b49395186098a461369948d90a9f89db63771c424fdc"
-    },
-    {
         "id": 5,
         "username": "Michael",
         "role": "user",
