@@ -46,26 +46,35 @@ def create_task_action(session):
             print("Error: Invalid Project ID. Please enter a valid integer.")
 
     users = load_users()
-    if USE_RICH:
-        console.print("\n[bold underline]AVAILABLE USERS[/bold underline]")
-        table = Table(show_header=True, header_style="bold magenta")
-        table.add_column("ID", justify="right")
-        table.add_column("Username")
-        table.add_column("Role")
-        for u in users:
-            table.add_row(str(u.id), u.username, u.role)
-        console.print(table)
-    else:
-        print("\n=== AVAILABLE USERS ===")
-        for u in users:
-            print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
 
-    while True:
-        try:
-            assigned_to = int(input("\nEnter the User ID to assign this task to: ").strip())
-            break
-        except ValueError:
-            print("Error: Invalid User ID. Please enter a valid integer.")
+    # Ask if admin wants to assign now or leave unassigned
+    assigned_to = None
+    assign_now = input("\nAssign this task now? (y/N): ").strip().lower()
+    if assign_now == 'y':
+        if USE_RICH:
+            console.print("\n[bold underline]AVAILABLE USERS[/bold underline]")
+            table = Table(show_header=True, header_style="bold magenta")
+            table.add_column("ID", justify="right")
+            table.add_column("Username")
+            table.add_column("Role")
+            for u in users:
+                table.add_row(str(u.id), u.username, u.role)
+            console.print(table)
+        else:
+            print("\n=== AVAILABLE USERS ===")
+            for u in users:
+                print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
+
+        while True:
+            try:
+                assigned_to_input = input("\nEnter the User ID to assign this task to: ").strip()
+                if assigned_to_input == "":
+                    assigned_to = None
+                    break
+                assigned_to = int(assigned_to_input)
+                break
+            except ValueError:
+                print("Error: Invalid User ID. Please enter a valid integer.")
 
     title = input("Enter task title: ").strip()
 
@@ -76,7 +85,8 @@ def create_task_action(session):
     )
 
     # Automatically enroll the user into the project when assigned a task
-    assign_user_to_project(project_id, assigned_to)
+    if assigned_to is not None:
+        assign_user_to_project(project_id, assigned_to)
 
     print(f"\n✅ Task '{new_task.title}' created successfully (ID: {new_task.id})")
 

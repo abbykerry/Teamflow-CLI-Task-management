@@ -79,6 +79,26 @@ def test_task_lifecycle():
     assert t2.assigned_to is None
 
 
+def test_update_task_assignment():
+    """Tasks can be reassigned using the service helper"""
+    u1 = user_service.create_user("ed", "a", "user")
+    u2 = user_service.create_user("frank", "b", "user")
+    p = project_service.create_project("proj", "desc", u1.id)
+    t = task_service.create_task(p.id, "reassignable", "", u1.id)
+    assert t.assigned_to == u1.id
+
+    # perform reassignment
+    updated = task_service.update_task_assignment(t.id, u2.id)
+    assert updated.assigned_to == u2.id
+    # check persisted in storage
+    all_tasks = task_service.load_tasks()
+    assert any(task.id == t.id and task.assigned_to == u2.id for task in all_tasks)
+
+    # invalid task should raise
+    with pytest.raises(ValueError):
+        task_service.update_task_assignment(9999, u2.id)
+
+
 # extra safety: verify JSON data structure matches expectations
 
 def test_user_file_json_format():
