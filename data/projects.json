@@ -88,8 +88,19 @@
         "description": "javascript functions",
         "owner_id": 1,
         "member_ids": [
-            5
+            5,
+            8
         ],
         "created_at": "2026-03-02T22:17:11.261071"
+    },
+    {
+        "id": 10,
+        "name": "bible study",
+        "description": "exodus",
+        "owner_id": 1,
+        "member_ids": [
+            8
+        ],
+        "created_at": "2026-03-04T18:40:42.538413+00:00"
     }
 ]

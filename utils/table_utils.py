@@ -1,12 +1,5 @@
 # utils/table_utils.py
 
-"""Helper functions for printing beautifully formatted tables using rich.
-
-This module provides ``display_table()`` which renders elegant, well-formatted
-tables with rich styling, borders, and colors. All data is displayed in a
-structured, scannable table format with clear column and row separation.
-"""
-
 from __future__ import annotations #this allows us to use the function name in its own type hints. 
 #type hints is a way to indicate the expected data types of function arguments and return values, 
 # which can help with code readability and debugging.

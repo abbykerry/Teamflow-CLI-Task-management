@@ -1,4 +1,5 @@
-from functools import wraps
+from functools import wraps #this is used to preserve the original function's metadata when we wrap it with our decorator
+from auth.session import Session
 from auth.session import Session
 
 def require_auth(func):
@@ -32,7 +33,7 @@ def require_role(required_role: str):
     """
     def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs): #args and kwargs are arguments passed to the decorated function to check for session
             # Look for session in args or kwargs
             session = None
             for arg in args:
