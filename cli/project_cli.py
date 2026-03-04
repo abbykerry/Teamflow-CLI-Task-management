@@ -15,10 +15,11 @@ from cli import menu
 
 # optional rich support for pretty tables
 try:
-    from rich.console import Console
+    from rich.console import Console #this is only used for nicer project/task dashboards, 
+    #so we can still function without it if not installed. We just won't have the nice tables.
     from rich.table import Table
     console = Console()
-    USE_RICH = True
+    USE_RICH = True 
 except ImportError:  # rich not installed
     console = None
     USE_RICH = False

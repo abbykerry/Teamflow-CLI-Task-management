@@ -17,18 +17,66 @@
     },
     {
         "id": 3,
-        "project_id": 2,
-        "title": "Present in class",
-        "assigned_to": null,
+        "project_id": 1,
+        "title": "React basics",
+        "assigned_to": 3,
+        "status": "in progress",
+        "created_at": "2026-03-02T10:32:54.620943"
+    },
+    {
+        "id": 4,
+        "project_id": 4,
+        "title": "Java basics",
+        "assigned_to": 6,
         "status": "in_progress",
         "created_at": "2026-03-03T14:47:17.332615+00:00"
     },
     {
-        "id": 4,
-        "project_id": 2,
-        "title": "Show working files",
-        "assigned_to": null,
+        "id": 5,
+        "project_id": 5,
+        "title": "Python sequences",
+        "assigned_to": 3,
+        "status": "done",
+        "created_at": "2026-03-02T10:34:53.016343"
+    },
+    {
+        "id": 6,
+        "project_id": 7,
+        "title": "Career examination - writing a great CV!",
+        "assigned_to": 3,
         "status": "todo",
-        "created_at": "2026-03-03T14:54:29.406171+00:00"
+        "created_at": "2026-03-02T11:54:26.532473"
+    },
+    {
+        "id": 7,
+        "project_id": 3,
+        "title": "routers",
+        "assigned_to": 4,
+        "status": "todo",
+        "created_at": "2026-03-02T19:20:40.387502"
+    },
+    {
+        "id": 8,
+        "project_id": 4,
+        "title": "API",
+        "assigned_to": 6,
+        "status": "in progress",
+        "created_at": "2026-03-02T19:26:15.066460"
+    },
+    {
+        "id": 9,
+        "project_id": 3,
+        "title": "explore state management",
+        "assigned_to": 6,
+        "status": "todo",
+        "created_at": "2026-03-04T10:45:42.185203+00:00"
+    },
+    {
+        "id": 10,
+        "project_id": 9,
+        "title": "usestate and custom hooks",
+        "assigned_to": 5,
+        "status": "todo",
+        "created_at": "2026-03-04T14:17:31.996364+00:00"
     }
 ]

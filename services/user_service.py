@@ -92,3 +92,11 @@ def get_user_by_username(username):
         if user.username == username:
             return user
     return None # Return None if no user with the given username is found
+
+def get_user_by_id(user_id):
+    """Get a user by their ID"""
+    users = load_users()
+    for user in users:
+        if user.id == user_id:
+            return user
+    return None # Return None if no user with the given ID is found

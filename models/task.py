@@ -19,6 +19,11 @@ class Task:
         status: str,
         created_at: str = None,
     ):
+    #these attributes are protected because we want to enforce validation through the property setters. 
+    # For example, we want to ensure that the title is always a non-empty string and that assigned_to 
+    # is either an integer user ID or None. By using properties, 
+    # we can add this validation logic in one place and ensure that any code that tries to set these 
+    # attributes will go through the proper checks.
         self._id = id
         self._project_id = project_id
         self._title = title
