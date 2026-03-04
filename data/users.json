@@ -18,15 +18,21 @@
         "password_hash": "84cbde6bdd9f4d95f76556a6c2f9b415:6faf8b1de9b41af448b133afd8dee301a91c7cf5f0ef1fc167255f99bb784a60"
     },
     {
-        "id": 4,
-        "username": "test",
+        "id": 5,
+        "username": "Michael",
         "role": "user",
-        "password_hash": "94957c8a2b97664854933f35388b0dd9:1854c239984efb1fc19db9304145ca6ae5505ea35b16ac27732559951badcbc6"
+        "password_hash": "261ffe4c4d90d4cdc699475bd1e8697b:fa73b043d83666ee8a8ac1ad6d2ad79daeb245a0347d4b3a81958a294ea2e03c"
     },
     {
-        "id": 5,
-        "username": "Brian",
+        "id": 6,
+        "username": "Angel",
         "role": "user",
-        "password_hash": "8eb4d66affa2344c4479c3cfd67a4c66:8bec91829fce29839adad232e1dd54a5d77825ea7754a2668eb3f5445a1a34c6"
+        "password_hash": "9493e1fa355949fc7b81da8a69aa7ff2:19a96853269acf902d7a4f63154217a9b1f77cb1971b432eb7c4461239e680bb"
+    },
+    {
+        "id": 7,
+        "username": "Mike",
+        "role": "user",
+        "password_hash": "e14a96010c0327a298ce612b70654793:9b263e091ba95ee81adeeda0ec538f2bd4b7392415bfee27416048e5fde5b196"
     }
 ]

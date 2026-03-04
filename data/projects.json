@@ -1,19 +1,19 @@
 [
     {
         "id": 1,
-        "name": "Class Presentation",
-        "description": "Group work",
+        "name": "CLI Tool",
+        "description": "Group project",
         "owner_id": 1,
         "member_ids": [
             2,
             3
         ],
-        "created_at": "2026-03-03T14:29:35.194289+00:00"
+        "created_at": "2026-02-27T10:00:00"
     },
     {
         "id": 2,
-        "name": "Work Assignment",
-        "description": "Show work",
+        "name": "abby task",
+        "description": "task management",
         "owner_id": 1,
         "member_ids": [],
         "created_at": "2026-03-01T16:40:45.766342"

@@ -4,6 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+
+# optional dependencies used by the CLI for enhanced output and config
 rich = "*"
 python-dotenv = "*"
 
