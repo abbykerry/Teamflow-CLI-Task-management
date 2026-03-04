@@ -12,15 +12,14 @@ from utils.decorators import require_role
 from cli.task_cli import update_task_status_action
 from cli import menu
 
-# optional rich support for pretty tables
+# optional rich support for pretty tables; unified rendering via helper
+from utils.table_utils import display_table
+
+# keep USE_RICH flag for backward compatibility
 try:
-    from rich.console import Console #this is only used for nicer project/task dashboards, 
-    #so we can still function without it if not installed. We just won't have the nice tables.
-    from rich.table import Table
-    console = Console()
-    USE_RICH = True 
-except ImportError:  # rich not installed
-    console = None
+    from rich.console import Console  # noqa: F401
+    USE_RICH = True
+except ImportError:
     USE_RICH = False
 
 
@@ -49,34 +48,15 @@ def assign_user_action(session):
         print("\n⚠️ No projects exist yet.")
         return
 
-    if USE_RICH:
-        console.print("\n[bold underline]AVAILABLE PROJECTS[/bold underline]")
-        table = Table(show_header=True, header_style="bold cyan")
-        table.add_column("ID", justify="right")
-        table.add_column("Name")
-        for p in projects:
-            table.add_row(str(p.id), p.name)
-        console.print(table)
-    else:
-        print("\n=== AVAILABLE PROJECTS ===")
-        for p in projects:
-            print(f"ID: {p.id} | Name: {p.name}")
+    headers = ["ID", "Name"]
+    rows = [[str(p.id), p.name] for p in projects]
+    display_table("AVAILABLE PROJECTS", headers, rows)
 
     # Show users
     users = load_users()
-    if USE_RICH:
-        console.print("\n[bold underline]AVAILABLE USERS[/bold underline]")
-        table = Table(show_header=True, header_style="bold magenta")
-        table.add_column("ID", justify="right")
-        table.add_column("Username")
-        table.add_column("Role")
-        for u in users:
-            table.add_row(str(u.id), u.username, u.role)
-        console.print(table)
-    else:
-        print("\n=== AVAILABLE USERS ===")
-        for u in users:
-            print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
+    headers = ["ID", "Username", "Role"]
+    rows = [[str(u.id), u.username, u.role] for u in users]
+    display_table("AVAILABLE USERS", headers, rows)
 
     try:
         project_id = int(input("\nEnter project ID: ").strip())
@@ -119,61 +99,35 @@ def handle_project_actions(session):
             if not user_projects:
                 print("\n📭 No projects available to display.")
             else:
-                if USE_RICH:
-                    from rich.table import Table
-
-                    table = Table(title=f"\n[bold underline]{dashboard_title}[/bold underline]", show_header=True, header_style="bold cyan")
-                    table.add_column("Proj ID", justify="right", style="cyan")
-                    table.add_column("Project Name", style="cyan")
-                    table.add_column("Task ID", justify="right")
-                    table.add_column("Task Title")
-                    table.add_column("Status", style="magenta")
-                    if user.role == "admin":
-                        table.add_column("Assigned To")
-
-                    for project in user_projects:
-                        if user.role == "admin":
-                            project_tasks = [t for t in all_tasks if t.project_id == project.id]
-                        else:
-                            project_tasks = [t for t in all_tasks if t.project_id == project.id and t.assigned_to == user.id]
-
-                        if project_tasks:
-                            for i, task in enumerate(project_tasks):
-                                # Only show the project ID/Name on the first row for this project to group them visually
-                                p_id = str(project.id) if i == 0 else ""
-                                p_name = project.name if i == 0 else ""
-                                
-                                assigned_name = user_map.get(task.assigned_to, "Unknown")
-
-                                if user.role == "admin":
-                                    table.add_row(p_id, p_name, str(task.id), task.title, task.status, assigned_name)
-                                else:
-                                    table.add_row(p_id, p_name, str(task.id), task.title, task.status)
-                        else:
-                            if user.role == "admin":
-                                table.add_row(str(project.id), project.name, "-", "[yellow]No tasks[/yellow]", "-", "-")
-                            else:
-                                table.add_row(str(project.id), project.name, "-", "[yellow]No tasks[/yellow]", "-")
-                    
-                    console.print(table)
-                    print("")
+                # prepare table headers and rows regardless of rich availability
+                if user.role == "admin":
+                    headers = ["Proj ID", "Project Name", "Task ID", "Task Title", "Status", "Assigned To"]
                 else:
-                    print(f"\n=== {dashboard_title} ===")
-                    for project in user_projects:
-                        print(f"\nProject: {project.name} (ID: {project.id})")
-                        print(f"Description: {project.description}")
+                    headers = ["Proj ID", "Project Name", "Task ID", "Task Title", "Status"]
 
+                rows = []
+                for project in user_projects:
+                    if user.role == "admin":
+                        project_tasks = [t for t in all_tasks if t.project_id == project.id]
+                    else:
+                        project_tasks = [t for t in all_tasks if t.project_id == project.id and t.assigned_to == user.id]
+
+                    if project_tasks:
+                        for i, task in enumerate(project_tasks):
+                            p_id = str(project.id) if i == 0 else ""
+                            p_name = project.name if i == 0 else ""
+                            assigned_name = user_map.get(task.assigned_to, "Unknown")
+                            if user.role == "admin":
+                                rows.append([p_id, p_name, str(task.id), task.title, task.status, assigned_name])
+                            else:
+                                rows.append([p_id, p_name, str(task.id), task.title, task.status])
+                    else:
                         if user.role == "admin":
-                            project_tasks = [t for t in all_tasks if t.project_id == project.id]
+                            rows.append([str(project.id), project.name, "-", "No tasks", "-", "-"])
                         else:
-                            project_tasks = [t for t in all_tasks if t.project_id == project.id and t.assigned_to == user.id]
+                            rows.append([str(project.id), project.name, "-", "No tasks", "-"])
 
-                        if project_tasks:
-                            for task in project_tasks:
-                                assigned_name = user_map.get(task.assigned_to, "Unknown")
-                                print(f"    -> Task: [{task.status}] {task.title} (Assigned to: {assigned_name})")
-                        else:
-                            print("    -> No tasks exist for this project." if user.role == "admin" else "    -> No tasks assigned to you for this project.")
+                display_table(dashboard_title, headers, rows)
                 print("\n" + "=" * 45)
         elif choice == "4":
             update_task_status_action(session)

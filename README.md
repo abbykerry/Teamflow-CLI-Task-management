@@ -49,11 +49,17 @@ Teamflow-CLI-Task-management/
 	```
 	*This will create the necessary data files along with a fresh Admin account.*
 
-5. Run the CLI with:
+5. Run the CLI with one of the following (both are equivalent):
 
-	```sh
-	python3 -m cli.main
-	```
+    ```sh
+    python3 -m cli.main
+    # or
+    python -m cli.main
+    ```
+
+    The application uses the `rich` package to render beautiful tables where
+    available; if `rich` is not installed an ASCII-style table will still be
+    printed so every list remains formatted in a tabular layout.
 
 ## Encapsulation and Validation
 

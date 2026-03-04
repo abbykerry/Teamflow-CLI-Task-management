@@ -6,14 +6,15 @@ from services.user_service import load_users, get_user_by_id
 from utils.decorators import require_role
 from cli import menu
 
-# optional rich support for pretty tables
+# optional rich support for pretty tables; use helper to render consistently
+from utils.table_utils import display_table
+
+# legacy flag used by some existing logic; the helper already detects rich
 try:
-    from rich.console import Console
-    from rich.table import Table
-    console = Console()
+    # attempt to import rich to maintain USE_RICH semantics
+    from rich.console import Console  # noqa: F401
     USE_RICH = True
-except ImportError:  # rich not installed
-    console = None
+except ImportError:
     USE_RICH = False
 
 
@@ -25,18 +26,10 @@ def create_task_action(session):
         print("\n⚠️ Warning: No projects exist. Please create a project first.")
         return
 
-    if USE_RICH:
-        console.print("\n[bold underline]AVAILABLE PROJECTS[/bold underline]")
-        table = Table(show_header=True, header_style="bold cyan")
-        table.add_column("ID", justify="right")
-        table.add_column("Name")
-        for project in projects:
-            table.add_row(str(project.id), project.name)
-        console.print(table)
-    else:
-        print("\n=== AVAILABLE PROJECTS ===")
-        for project in projects:
-            print(f"ID: {project.id} | Name: {project.name}")
+    # display projects in table form
+    headers = ["ID", "Name"]
+    rows = [[str(p.id), p.name] for p in projects]
+    display_table("AVAILABLE PROJECTS", headers, rows)
 
     while True:
         try:
@@ -51,19 +44,9 @@ def create_task_action(session):
     assigned_to = None
     assign_now = input("\nAssign this task now? (y/N): ").strip().lower()
     if assign_now == 'y':
-        if USE_RICH:
-            console.print("\n[bold underline]AVAILABLE USERS[/bold underline]")
-            table = Table(show_header=True, header_style="bold magenta")
-            table.add_column("ID", justify="right")
-            table.add_column("Username")
-            table.add_column("Role")
-            for u in users:
-                table.add_row(str(u.id), u.username, u.role)
-            console.print(table)
-        else:
-            print("\n=== AVAILABLE USERS ===")
-            for u in users:
-                print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
+        headers = ["ID", "Username", "Role"]
+        rows = [[str(u.id), u.username, u.role] for u in users]
+        display_table("AVAILABLE USERS", headers, rows)
 
         while True:
             try:
@@ -101,20 +84,9 @@ def update_task_status_action(session):
         print("\n📭 You have no tasks assigned.")
         return
 
-    if USE_RICH:
-        console.print("\n[bold underline]YOUR TASKS[/bold underline]")
-        table = Table(show_header=True, header_style="bold green")
-        table.add_column("ID", justify="right")
-        table.add_column("Project")
-        table.add_column("Title")
-        table.add_column("Status")
-        for task in user_tasks:
-            table.add_row(str(task.id), str(task.project_id), task.title, task.status)
-        console.print(table)
-    else:
-        print("\n=== YOUR TASKS ===")
-        for task in user_tasks:
-            print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
+    headers = ["ID", "Project", "Title", "Status"]
+    rows = [[str(t.id), str(t.project_id), t.title, t.status] for t in user_tasks]
+    display_table("YOUR TASKS", headers, rows)
 
     try:
         task_id = int(input("\nEnter task ID to update status: ").strip())
@@ -159,30 +131,12 @@ def view_all_tasks_action(session):
     users = load_users()
     user_map = {u.id: u.username for u in users}
     
-    if USE_RICH:
-        console.print("\n[bold underline]ALL TASKS[/bold underline]")
-        table = Table(show_header=True, header_style="bold yellow")
-        table.add_column("ID", justify="right")
-        table.add_column("Project ID", justify="right")
-        table.add_column("Title")
-        table.add_column("Assigned To")
-        table.add_column("Status")
-        
-        for task in tasks:
-            assigned_user = user_map.get(task.assigned_to, "Unassigned") if task.assigned_to else "Unassigned"
-            table.add_row(
-                str(task.id),
-                str(task.project_id),
-                task.title,
-                assigned_user,
-                task.status
-            )
-        console.print(table)
-    else:
-        print("\n=== ALL TASKS ===")
-        for task in tasks:
-            assigned_user = user_map.get(task.assigned_to, "Unassigned") if task.assigned_to else "Unassigned"
-            print(f"ID: {task.id} | Project: {task.project_id} | Title: {task.title} | Assigned To: {assigned_user} | Status: {task.status}")
+    headers = ["ID", "Project ID", "Title", "Assigned To", "Status"]
+    rows = []
+    for task in tasks:
+        assigned_user = user_map.get(task.assigned_to, "Unassigned") if task.assigned_to else "Unassigned"
+        rows.append([str(task.id), str(task.project_id), task.title, assigned_user, task.status])
+    display_table("ALL TASKS", headers, rows)
 
 
 @require_role('admin')
@@ -199,29 +153,13 @@ def reassign_task_action(session):
     user_map = {u.id: u.username for u in users}
     
     # Display all tasks
-    if USE_RICH:
-        console.print("\n[bold underline]ALL TASKS[/bold underline]")
-        table = Table(show_header=True, header_style="bold yellow")
-        table.add_column("ID", justify="right")
-        table.add_column("Title")
-        table.add_column("Currently Assigned To")
-        table.add_column("Status")
-        
-        for task in tasks:
-            assigned_user = user_map.get(task.assigned_to, "Unassigned") if task.assigned_to else "Unassigned"
-            table.add_row(
-                str(task.id),
-                task.title,
-                assigned_user,
-                task.status
-            )
-        console.print(table)
-    else:
-        print("\n=== ALL TASKS ===")
-        for task in tasks:
-            assigned_user = user_map.get(task.assigned_to, "Unassigned") if task.assigned_to else "Unassigned"
-            print(f"ID: {task.id} | Title: {task.title} | Assigned To: {assigned_user} | Status: {task.status}")
-    
+    headers = ["ID", "Title", "Currently Assigned To", "Status"]
+    rows = []
+    for task in tasks:
+        assigned_user = user_map.get(task.assigned_to, "Unassigned") if task.assigned_to else "Unassigned"
+        rows.append([str(task.id), task.title, assigned_user, task.status])
+    display_table("ALL TASKS", headers, rows)
+
     # Get task ID to reassign
     try:
         task_id = int(input("\nEnter task ID to reassign: ").strip())
@@ -232,19 +170,9 @@ def reassign_task_action(session):
             return
         
         # Display available users
-        if USE_RICH:
-            console.print("\n[bold underline]AVAILABLE USERS[/bold underline]")
-            table = Table(show_header=True, header_style="bold magenta")
-            table.add_column("ID", justify="right")
-            table.add_column("Username")
-            table.add_column("Role")
-            for u in users:
-                table.add_row(str(u.id), u.username, u.role)
-            console.print(table)
-        else:
-            print("\n=== AVAILABLE USERS ===")
-            for u in users:
-                print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
+        headers = ["ID", "Username", "Role"]
+        rows = [[str(u.id), u.username, u.role] for u in users]
+        display_table("AVAILABLE USERS", headers, rows)
         
         # Get new assignee
         new_assignee_id = int(input("\nEnter User ID to reassign this task to: ").strip())
@@ -282,20 +210,9 @@ def handle_task_actions(session):
             if not assigned_tasks:
                 print("\n📭 You have no tasks assigned.")
             else:
-                if USE_RICH:
-                    console.print("\n[bold underline]YOUR TASKS[/bold underline]")
-                    table = Table(show_header=True, header_style="bold green")
-                    table.add_column("ID", justify="right")
-                    table.add_column("Project")
-                    table.add_column("Title")
-                    table.add_column("Status")
-                    for task in assigned_tasks:
-                        table.add_row(str(task.id), str(task.project_id), task.title, task.status)
-                    console.print(table)
-                else:
-                    print("\n=== YOUR TASKS ===")
-                    for task in assigned_tasks:
-                        print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
+                headers = ["ID", "Project", "Title", "Status"]
+                rows = [[str(t.id), str(t.project_id), t.title, t.status] for t in assigned_tasks]
+                display_table("YOUR TASKS", headers, rows)
         elif choice == "4":
             view_all_tasks_action(session)
         elif choice == "5":
