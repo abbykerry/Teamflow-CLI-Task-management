@@ -120,7 +120,7 @@ def handle_project_actions(session):
                             rows.append([str(project.id), project.name, "-", "No tasks", "-"])
 
                 display_table(dashboard_title, headers, rows)
-                print("\n" + "=" * 45)
+                print("\n" + "=" * 45) # just a visual separator after the table for better readability
         elif choice == "4":
             update_task_status_action(session)
         elif choice == "5":
