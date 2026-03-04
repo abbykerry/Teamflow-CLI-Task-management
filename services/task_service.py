@@ -96,3 +96,21 @@ def get_tasks_by_project(project_id):
     ]
 
     return project_tasks
+
+def update_task_assignment(task_id, new_assigned_to):
+    """Update the assignment of a task to a different user"""
+    try:
+        tasks = load_tasks()
+        target_task = next((t for t in tasks if t.id == task_id), None)
+        
+        if not target_task:
+            logger.error(f"Task with ID {task_id} not found")
+            raise ValueError(f"Task with ID {task_id} not found")
+        
+        target_task.assigned_to = new_assigned_to
+        save_tasks(tasks)
+        logger.info(f"Task {task_id} reassigned to user {new_assigned_to}")
+        return target_task
+    except Exception as e:
+        logger.error(f"Error reassigning task {task_id}: {e}")
+        raise

@@ -5,16 +5,15 @@ from cli import project_cli
 from cli import task_cli
 
 # load environment variables if .env exists
-from dotenv import load_dotenv
-load_dotenv()
+#from dotenv import load_dotenv # optional dependency for .env support; will silently do nothing if not installed
+#load_dotenv() # load .env from project root if it exists, otherwise do nothing
 
 def main():
-    session = Session()
-
+    session = Session() # create a session to track auth state across the app. 
     print("Welcome to Teamflow CLI Task Management!")
 
     while True:
-        if not session.is_authenticated():
+        if not session.is_authenticated(): #this is the only place we check auth state, so we can show different menus and guard actions based on it
             choice = menu.show_auth_menu()
             if choice == "login":
                 # Assume these prompts are handled within the service or called separately
@@ -40,6 +39,8 @@ def main():
 
         # Authenticated flow
         role = session.current_user.role
+        # Show different menu options based on role and route to the appropriate 
+        # CLI handlers for projects and tasks. Admins get additional options.
         if role == 'admin':
             choice, action_type = menu.show_admin_menu()
         else:

@@ -16,7 +16,7 @@ class Project:
         member_ids=None,
         created_at=None,
     ):
-        self._id = id
+        self._id = id 
         self._name = name
         self._description = description
         self._owner_id = owner_id

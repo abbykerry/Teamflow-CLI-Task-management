@@ -5,7 +5,7 @@ def register(username: str, password: str, role: str) -> object:
     """
     Hashes the password and creates a new user via the user service.
     """
-    hashed_password = hash_password(password)
+    hashed_password = hash_password(password) 
     new_user = create_user(username, hashed_password, role)
     return new_user
 

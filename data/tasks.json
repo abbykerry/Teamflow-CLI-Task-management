@@ -27,7 +27,7 @@
         "id": 4,
         "project_id": 4,
         "title": "Java basics",
-        "assigned_to": 2,
+        "assigned_to": 6,
         "status": "in_progress",
         "created_at": "2026-03-02T10:34:08.252996"
     },
@@ -35,7 +35,7 @@
         "id": 5,
         "project_id": 5,
         "title": "Python sequences",
-        "assigned_to": 1,
+        "assigned_to": 3,
         "status": "done",
         "created_at": "2026-03-02T10:34:53.016343"
     },
@@ -62,5 +62,21 @@
         "assigned_to": 6,
         "status": "in progress",
         "created_at": "2026-03-02T19:26:15.066460"
+    },
+    {
+        "id": 9,
+        "project_id": 3,
+        "title": "explore state management",
+        "assigned_to": 6,
+        "status": "todo",
+        "created_at": "2026-03-04T10:45:42.185203+00:00"
+    },
+    {
+        "id": 10,
+        "project_id": 9,
+        "title": "usestate and custom hooks",
+        "assigned_to": 5,
+        "status": "todo",
+        "created_at": "2026-03-04T14:17:31.996364+00:00"
     }
 ]

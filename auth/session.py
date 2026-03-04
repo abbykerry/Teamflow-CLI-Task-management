@@ -8,9 +8,11 @@ class Session:
 
     def __init__(self) -> None:
         # Starts with no one logged in
-        self.current_user: Optional[Any] = None
+        self.current_user: Optional[Any] = None #any here is a placeholder for the user data structure, 
+        #which could be a User object or a simple dict depending on how we implement it later. We just need to store something that represents the logged-in user.
 
-    def login(self, user_data: Any) -> None:
+    def login(self, user_data: Any) -> None: #none return type because this method just updates the session state, 
+        #it doesn't need to return anything. The user_data parameter can be any structure that represents the user's information (like a User object or a dict), and we store it in the session to keep track of who is logged in.
         """
         Saves the user's data into memory. 
         Maggie will call this after a successful password check.

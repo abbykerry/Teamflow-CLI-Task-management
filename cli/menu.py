@@ -78,7 +78,9 @@ def tasks_menu():
     print("\n=== TASKS MENU ===")
     print("1. Create Task (Admin)")
     print("2. Update Task Status")
-    print("3. View Tasks")
-    print("4. Back")
+    print("3. View My Tasks")
+    print("4. View All Tasks (Admin)")
+    print("5. Reassign Task (Admin)")
+    print("6. Back")
 
     return input("Choose an option: ").strip()
