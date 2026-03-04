@@ -94,7 +94,7 @@ def get_tasks_by_project(project_id):
         task for task in tasks
         if task.project_id == project_id
     ]
-
+https://github.com/abbykerry/Teamflow-CLI-Task-management/pull/19/conflict?name=data%252Ftasks.json&ancestor_oid=4c5c29a10074b02cc72aa010a90b18d73154568d&base_oid=9bfe54d9b35edd76153ffb1d1c6600c2354dc6eb&head_oid=456088dc04c8e5d001e651668ede8c994c01755c
     return project_tasks
 
 def update_task_assignment(task_id, new_assigned_to):
