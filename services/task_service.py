@@ -67,7 +67,7 @@ def create_task(project_id, title, description="", assigned_to=None, status="tod
         tasks = load_tasks()
 
         if tasks:
-            new_id = max(t.id for t in tasks) + 1
+            new_id = max(t.id for t in tasks) + 1 # Generate a new ID based on the highest existing ID
         else:
             new_id = 1
 
