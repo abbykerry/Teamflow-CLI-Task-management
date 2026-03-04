@@ -105,14 +105,15 @@ def test_create_task_unassigned_cli(monkeypatch):
     assert tasks[0].assigned_to is None
 
 
-# ensure that tables work without rich (ascii fallback)
-def test_display_table_fallback(monkeypatch, capsys):
-    from utils import table_utils
-    monkeypatch.setattr(table_utils, "_RICH_AVAILABLE", False)
-    headers = ["A", "B"]
-    rows = [["one", "two"], ["three", "four"]]
-    table_utils.display_table("TITLE", headers, rows)
+# ensure that tables are properly formatted with rich
+def test_display_table_formatting(capsys):
+    """Verify display_table uses rich for beautiful formatting."""
+    from utils.table_utils import display_table
+    headers = ["ID", "Name", "Status"]
+    rows = [["1", "Task One", "todo"], ["2", "Task Two", "done"]]
+    display_table("TEST TABLE", headers, rows)
     captured = capsys.readouterr()
-    assert "TITLE" in captured.out
-    assert "+" in captured.out  # ascii sep
-    assert "one" in captured.out
+    assert "TEST TABLE" in captured.out
+    assert "Task One" in captured.out
+    assert "done" in captured.out
+

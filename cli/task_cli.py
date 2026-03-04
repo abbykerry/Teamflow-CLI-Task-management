@@ -4,18 +4,9 @@ from services.task_service import create_task, load_tasks, save_tasks, update_ta
 from services.project_service import load_projects, assign_user_to_project
 from services.user_service import load_users, get_user_by_id
 from utils.decorators import require_role
+from utils.table_utils import display_table
 from cli import menu
 
-# optional rich support for pretty tables; use helper to render consistently
-from utils.table_utils import display_table
-
-# legacy flag used by some existing logic; the helper already detects rich
-try:
-    # attempt to import rich to maintain USE_RICH semantics
-    from rich.console import Console  # noqa: F401
-    USE_RICH = True
-except ImportError:
-    USE_RICH = False
 
 
 @require_role('admin')

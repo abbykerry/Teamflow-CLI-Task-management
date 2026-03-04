@@ -41,10 +41,10 @@ Teamflow-CLI-Task-management/
 	```sh
 	pipenv install
 	```
+	and then run `pipenv shell` to open a virtual environment. This ensures your dependencies are not scattered all over, which may cause conflicts in future. So this keeps everything clean, and dependencies safe from manipulation
 
 4. Since the database files (`data/*.json`) are excluded from version control, you **must** initialize a clean, local database before running the app. Do this by running:
 
-	```sh
 	python3 setup_users.py
 	```
 	*This will create the necessary data files along with a fresh Admin account.*
@@ -87,10 +87,22 @@ pytest -q
 
 ## Contributing
 
-Feel free to fork the repository and submit pull requests. Follow the existing
+Project was a team collaboration by three amazing techies: 
+ronnyabuto
+abbykerry
+insight-with-maggie
+
+Feel free to fork the repository and build on top of it. Follow the existing
 style of simple functions, clear docstrings, and keep logic in services rather
 than CLI modules.
 
-## License
+# #project management tool used
+We used Trello for project mangement to provide a clear layout of the project timeline, team roles and responsibilities, project scope, tasks, code reviews and all the nitty gritties of team management. For reference we've provided a link to the trello Teamflow Task management system.
+* * Link is : https://trello.com/b/vcQAStSr/teamflow-cli-task-management-system
 
+* * Link to the repository is: https://github.com/abbykerry/Teamflow-CLI-Task-management.git
+
+## License
 This project is provided under the MIT License. See `LICENSE.md` for details.
+
+                        😃 HAPPY CODING 🔥🔥!!!!!!!!!!!!!!!!!!
