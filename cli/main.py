@@ -54,10 +54,14 @@ def main():
             break
 
         # Route the choice
-        if action_type == "project":
-            project_cli.handle_project_actions(session)
-        elif action_type == "task":
-            task_cli.handle_task_actions(session)
+        if action_type == "dashboard":
+            project_cli.view_dashboard_action(session)
+        elif action_type == "manage_projects":
+            project_cli.handle_manage_projects(session)
+        elif action_type == "manage_tasks":
+            task_cli.handle_manage_tasks(session)
+        elif action_type == "update_task":
+            task_cli.update_task_status_action(session)
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 # cli/task_cli.py
 
-from services.task_service import create_task, load_tasks, save_tasks
+from services.task_service import create_task, load_tasks, save_tasks, update_task, delete_task
 from services.project_service import load_projects, assign_user_to_project
 from services.user_service import load_users
 from utils.decorators import require_role
@@ -81,6 +81,93 @@ def create_task_action(session):
     print(f"\n✅ Task '{new_task.title}' created successfully (ID: {new_task.id})")
 
 
+@require_role('admin')
+def edit_task_action(session):
+    tasks = load_tasks()
+    if not tasks:
+        print("\n⚠️ No tasks exist yet.")
+        return
+
+    if USE_RICH:
+        console.print("\n[bold underline]AVAILABLE TASKS[/bold underline]")
+        table = Table(show_header=True, header_style="bold green")
+        table.add_column("ID", justify="right")
+        table.add_column("Project", justify="right")
+        table.add_column("Title")
+        table.add_column("Status")
+        table.add_column("Assignee", justify="right")
+        for t in tasks:
+            table.add_row(str(t.id), str(t.project_id), t.title, t.status, str(t.assigned_to))
+        console.print(table)
+    else:
+        print("\n=== AVAILABLE TASKS ===")
+        for t in tasks:
+            print(f"ID: {t.id} | Proj: {t.project_id} | Title: {t.title} | Status: {t.status} | Assignee: {t.assigned_to}")
+
+    try:
+        task_id = int(input("\nEnter task ID to edit: ").strip())
+        
+        # Display available statuses
+        print("\nAvailable statuses:")
+        print("1. todo")
+        print("2. in_progress")
+        print("3. done")
+        print("4. (Keep current)")
+        status_choice = input("Choose a status option (1-4): ").strip()
+        status_map = {"1": "todo", "2": "in_progress", "3": "done"}
+        status = status_map.get(status_choice, None)
+        
+        title = input("Enter new title (leave blank to keep current): ").strip()
+        title = title if title else None
+
+        users = load_users()
+        if USE_RICH:
+            console.print("\n[bold underline]AVAILABLE USERS (For Reassignment)[/bold underline]")
+            table = Table(show_header=True, header_style="bold magenta")
+            table.add_column("ID", justify="right")
+            table.add_column("Username")
+            table.add_column("Role")
+            for u in users:
+                table.add_row(str(u.id), u.username, u.role)
+            console.print(table)
+        else:
+            print("\n=== AVAILABLE USERS ===")
+            for u in users:
+                print(f"ID: {u.id} | Username: {u.username} | Role: {u.role}")
+
+        assign_input = input("\nEnter new assignee ID (leave blank to keep current): ").strip()
+        assigned_to = int(assign_input) if assign_input else None
+        
+        if status is None and title is None and assigned_to is None:
+            print("\n⚠️ No changes requested.")
+            return
+
+        if update_task(task_id, title=title, assigned_to=assigned_to, status=status):
+            print(f"\n✅ Task {task_id} updated successfully.")
+            if assigned_to is not None:
+                # Find task to get its project ID so we can auto-enroll the new assignee
+                updated_t = next((t for t in load_tasks() if t.id == task_id), None)
+                if updated_t:
+                    assign_user_to_project(updated_t.project_id, assigned_to)
+        else:
+            print(f"\n❌ Task {task_id} not found.")
+
+    except ValueError:
+        print("\n❌ Error: Invalid input. Expected an integer where applicable.")
+
+
+@require_role('admin')
+def delete_task_action(session):
+    try:
+        task_id = int(input("\nEnter task ID to delete: ").strip())
+        if delete_task(task_id):
+            print(f"\n✅ Task {task_id} deleted successfully.")
+        else:
+            print(f"\n❌ Task {task_id} not found.")
+    except ValueError:
+        print("\n❌ Error: IDs must be integers.")
+
+
 def update_task_status_action(session):
     """Update status of a task assigned to the current user"""
     user = session.current_user
@@ -137,42 +224,21 @@ def update_task_status_action(session):
         print("\n❌ Error: task ID must be an integer.")
 
 
-def handle_task_actions(session):
+@require_role('admin')
+def handle_manage_tasks(session):
     """
-    Handles task-related actions. Keeps showing the tasks menu until the user
-    selects the "Back" option.
+    Handles task management routing for Admins.
     """
-    user = session.current_user
     while True:
-        choice = menu.tasks_menu()
+        choice = menu.admin_manage_tasks_menu()
 
         if choice == "1":
             create_task_action(session)
         elif choice == "2":
-            update_task_status_action(session)
+            edit_task_action(session)
         elif choice == "3":
-            tasks = load_tasks()
-            assigned_tasks = [t for t in tasks if t.assigned_to == user.id]
-
-            if not assigned_tasks:
-                print("\n📭 You have no tasks assigned.")
-            else:
-                if USE_RICH:
-                    console.print("\n[bold underline]YOUR TASKS[/bold underline]")
-                    table = Table(show_header=True, header_style="bold green")
-                    table.add_column("ID", justify="right")
-                    table.add_column("Project")
-                    table.add_column("Title")
-                    table.add_column("Status")
-                    for task in assigned_tasks:
-                        table.add_row(str(task.id), str(task.project_id), task.title, task.status)
-                    console.print(table)
-                else:
-                    print("\n=== YOUR TASKS ===")
-                    for task in assigned_tasks:
-                        print(f"ID: {task.id} | Project ID: {task.project_id} | Title: {task.title} | Status: {task.status}")
+            delete_task_action(session)
         elif choice == "4":
-            # return to previous menu
             break
         else:
-            print("\n⚠️ Invalid task option selected.")
+            print("\n⚠️ Invalid option selected.")

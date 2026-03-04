@@ -96,3 +96,59 @@ def get_tasks_by_project(project_id):
     ]
 
     return project_tasks
+
+def update_task(task_id, title=None, assigned_to=None, status=None):
+    """Updates a task's title, assignee, or status."""
+    try:
+        tasks = load_tasks()
+        for t in tasks:
+            if t.id == task_id:
+                has_changes = False
+                if title and t.title != title:
+                    t.title = title
+                    has_changes = True
+                if assigned_to is not None and t.assigned_to != assigned_to:
+                    t.assigned_to = assigned_to
+                    has_changes = True
+                if status and t.status != status:
+                    t.status = status
+                    has_changes = True
+                
+                if has_changes:
+                    save_tasks(tasks)
+                    logger.info(f"Updated task {task_id}")
+                return True
+        return False
+    except Exception as e:
+        logger.error(f"Error updating task {task_id}: {e}")
+        return False
+
+def unassign_task(task_id):
+    """Removes assignee from a task (sets assigned_to to None)."""
+    try:
+        tasks = load_tasks()
+        for t in tasks:
+            if t.id == task_id:
+                t.assigned_to = None
+                save_tasks(tasks)
+                logger.info(f"Unassigned task {task_id}")
+                return True
+        return False
+    except Exception as e:
+        logger.error(f"Error unassigning task {task_id}: {e}")
+        return False
+
+def delete_task(task_id):
+    """Deletes a task by ID."""
+    try:
+        tasks = load_tasks()
+        initial_count = len(tasks)
+        tasks = [t for t in tasks if t.id != task_id]
+        if len(tasks) < initial_count:
+            save_tasks(tasks)
+            logger.info(f"Deleted task {task_id}")
+            return True
+        return False
+    except Exception as e:
+        logger.error(f"Error deleting task {task_id}: {e}")
+        return False
